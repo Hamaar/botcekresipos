@@ -1,8 +1,8 @@
 body {
   overflow: hidden;
-    background-image: url("../img/bg_religi3.jpg");
-    
-  background-size: contain;
+    background-image: url("../img/bg_pos.jpg");
+    background-repeat: no-repeat;
+  background-size:contain
   
 }
 .chat-area {
@@ -76,7 +76,7 @@ body {
 }
 
 .btn{
-   background-color: #4CAF50; /* Green */
+   background-color: #FC6B01; /* Green */
   border: none;
   color: white;
   /* padding: 8px; */

@@ -12,7 +12,7 @@ function createUserMessage(payload) {
   userImg.setAttribute("class", "img-circle");
   userImg.setAttribute("alt", "User Avatar");
   if (!msgPos) userImg.setAttribute("src", "img/client.png");
-  else userImg.setAttribute("src", "img/islamic-calendar.png");
+  else userImg.setAttribute("src", "img/iconpos.jpeg");
 
   var chatImg = document.createElement("span");
   if (!msgPos) chatImg.setAttribute("class", "chat-img pull-left");
@@ -22,6 +22,8 @@ function createUserMessage(payload) {
   var msgTxt = document.createElement("p");
 
   var descMsgTxt = document.createElement("p");
+
+  var hisTxt = document.createElement("p");
 
   var ul = document.createElement("ul");
   ul.className = "ulbtn";
@@ -42,20 +44,20 @@ function createUserMessage(payload) {
     msgAudio.setAttribute("src", msgText);
     msgAudio.setAttribute("type", "audio/ogg;codecs=opus");
     msgTxt.appendChild(msgAudio);
-  } else if (msgType == "option") {
-    var message = document.createTextNode(msgText);
-    var description = document.createTextNode(descText);
-
-    msgTxt.appendChild(message);
-    descMsgTxt.appendChild(description);
-    ul.setAttribute("id", "proList");
-    divul.appendChild(ul);
-
-    isiOptionText.forEach(renderProductList);
   } else {
     // var message = document.createTextNode(msgText);
     msgTxt.innerHTML = msgText;
     // msgTxt.appendChild(message);
+    descMsgTxt.innerHTML = descText;
+
+    ul.setAttribute("id", "proList");
+    divul.appendChild(ul);
+
+    if (!isiOptionText == undefined || !isiOptionText == "") {
+      hisTxt.innerHTML = "Histori";
+      isiOptionText.forEach(renderProductList);
+    }
+    // console.log("Isi options", isiOptionText);
   }
 
   var user = document.createTextNode(msgUser + " | " + msgMoment);
@@ -72,8 +74,13 @@ function createUserMessage(payload) {
   } else {
     msgBox.setAttribute("class", "chat-body right clearfix");
     msgBox.appendChild(msgTxt);
-    if (descText !== "") {
+    if (
+      descText !== "" ||
+      !isiOptionText == undefined ||
+      !isiOptionText == ""
+    ) {
       msgBox.appendChild(descMsgTxt);
+      msgBox.appendChild(hisTxt);
     }
     msgBox.appendChild(divul);
 
@@ -104,27 +111,30 @@ function createUserMessage(payload) {
 
     var li = document.createElement("li");
     // li.appendChild(document.createTextNode(element));
-    var button = document.createElement("button");
-    button.innerHTML = element.label;
+    li.innerHTML =
+      "Tanggal : " + element.date + "<br> Deskripsi : " + element.desc;
+    // var button = document.createElement("button");
+    // console.log("Element", element);
+    // button.innerHTML = element.desc;
 
-    button.onclick = function () {
-      // alert(element.value.input.text);
+    // button.onclick = function () {
+    //   // alert(element.value.input.text);
 
-      var payload = {
-        user: "Pengguna",
-        message: element.value.input.text,
-        ts: new Date().getTime(),
-      };
+    //   var payload = {
+    //     user: "Pengguna",
+    //     message: element.value.input.text,
+    //     ts: new Date().getTime(),
+    //   };
 
-      createUserMessage(payload);
-      socket.emit("sendmsg", payload);
-      message.value = "";
-      return false;
-    };
-    li.appendChild(button);
-    li.setAttribute("id", element);
+    //   createUserMessage(payload);
+    //   socket.emit("sendmsg", payload);
+    //   message.value = "";
+    //   return false;
+    // };
+    // // li.appendChild(button);
+    // li.setAttribute("id", element);
     ul.appendChild(li);
-    button.className = "btn";
+    // button.className = "btn";
     li.className = "listbtn";
   }
 }

@@ -39,50 +39,53 @@ io.on("connection", function (socket) {
       if (!err) {
         //console.log(res);
         context = res.result.context;
-        console.log("Isi respon Message", res.result.output);
-        console.log("Respon title", res.result.output.generic[0].title);
-        console.log("Respon desc", res.result.output.generic[0].description);
-        console.log("Respon options", res.result.output.generic[0].options);
+        // console.log("Isi respon Message", res.result.output);
+        // console.log("Respon text1", res.result.output.generic[0].text);
+        // console.log("Respon text2", res.result.output.generic[1].text);
+        // console.log("Respon text3", res.result.output.generic[2].text);
 
-        if (res.result.output.generic.length > 0) {
-          switch (res.result.output.generic[0].response_type) {
-            case "text":
-              // It's a text response, so we just display it.
-              conversation_response = res.result.output.generic[0].text;
-              desc_response = "";
-              options_response = "";
-              break;
-            case "option":
-              // It's an option response, so we'll need to show the user
-              // a list of choices.
-              conversation_response = res.result.output.generic[0].title;
-              desc_response = res.result.output.generic[0].description;
-              options_response = res.result.output.generic[0].options;
-              // List the options by label.
-              for (let i = 0; i < options_response.length; i++) {
-                console.log(
-                  (i + 1).toString() + ". " + options_response[i].label
-                );
-              }
-              break;
-          }
-
-          // if (Array.isArray(res.result.output.generic))
+        if (res.result.output.generic.length <= 1) {
+          conversation_response = res.result.output.generic[0].text;
+          conversation_response2 = "";
+          obj = "";
+          // It's a text response, so we just display it.
+          // case "option":
+          //   // It's an option response, so we'll need to show the user
+          //   // a list of choices.
           //   conversation_response = res.result.output.generic[0].title;
-          // //.join(' ').trim();
+          //   desc_response = res.result.output.generic[0].description;
+          //   options_response = res.result.output.generic[0].options;
+          //   // List the options by label.
+          //   for (let i = 0; i < options_response.length; i++) {
+          //     console.log(
+          //       (i + 1).toString() + ". " + options_response[i].label
+          //     );
+          //   }
+          //   break;
+          console.log("Isi Generic", res.result.output.generic.length);
+        } else if (res.result.output.generic.length > 1) {
+          conversation_response = res.result.output.generic[0].text;
+          conversation_response2 = res.result.output.generic[1].text;
+          conversation_response3 = res.result.output.generic[2].text;
 
-          // if (conversation_response) {
-          var payload = {
-            user: "Bot Jadwal Sholat",
-            message: conversation_response,
-            deskripsi: desc_response,
-            isioptions: options_response,
-            ts: new Date().getTime(),
-            type: res.result.output.generic[0].response_type,
-          };
-          socket.emit("replymsg", payload);
-          // }
+          obj = JSON.parse(conversation_response3);
+          console.log("Objek", obj);
         }
+        // if (Array.isArray(res.result.output.generic))
+        //   conversation_response = res.result.output.generic[0].title;
+        // //.join(' ').trim();
+
+        // if (conversation_response) {
+        var payload = {
+          user: "Bot Cek Resi",
+          message: conversation_response,
+          deskripsi: conversation_response2,
+          isioptions: obj,
+          ts: new Date().getTime(),
+          type: res.result.output.generic[0].response_type,
+        };
+        socket.emit("replymsg", payload);
+        // }
       }
     });
   });
